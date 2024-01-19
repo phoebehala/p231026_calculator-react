@@ -24,12 +24,14 @@ const reducer = (state, { type, payload }) => {
         currentOperand: `${state.currentOperand || ""}${payload.digit}`,
         
       }
-   case ACTIONS.CHOOSE_OPERATION:
+    case ACTIONS.CHOOSE_OPERATION:
       return {
         ...state,
         operation: `${state.operation || ""}${payload.operation}`,
         
       }
+    case ACTIONS.CLEAR:
+      return {}
     default:
       return state;
   }
@@ -47,7 +49,7 @@ function App() {
         <div className="current-operand">{currentOperand}</div>
       </div>
 
-      <button className="span-two">AC</button>
+      <button className="span-two" onClick={()=>dispatch({type: ACTIONS.CLEAR})}>AC</button>
       <button>DEL</button>
       <button >+</button>
       {/* <button onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit: 1 } }) }>1</button> */}
