@@ -25,17 +25,64 @@ const reducer = (state, { type, payload }) => {
         
       }
     case ACTIONS.CHOOSE_OPERATION:
+      console.log(state.previousOperand)
+      if(state.currentOperand == null && state.previousOperand == null){
+        return state
+      }
+      if(state.previousOperand == null){
+        return {
+          ...state,
+          operation: payload.operation,
+          previousOperand: state.currentOperand,
+          currentOperand: null
+         
+        }
+      }
       return {
         ...state,
-        operation: `${state.operation || ""}${payload.operation}`,
-        
+        previousOperand: evaluate(state),
+        operation: payload.operation,
+        currentOperand: null
+
       }
+
     case ACTIONS.CLEAR:
       return {}
     default:
       return state;
   }
 };
+
+
+//function evaluate(state){
+  function evaluate( { previousOperand, operation, currentOperand } ){
+
+    // convert string to number
+    const prev = parseFloat(previousOperand)
+    const current = parseFloat(currentOperand)
+    if(isNaN(prev)||isNaN(current)) return ""
+
+    let computation = ""
+    switch (operation) {
+
+      case "+":
+        computation = prev + current
+        break
+      
+      case "-":
+        computation = prev - current 
+        break
+
+      case "*":
+        computation = prev * current 
+        break
+
+      case "/":
+        computation = prev * current  
+        break   
+    }
+    return computation.toString()
+}
 
 function App() {
   
@@ -51,7 +98,7 @@ function App() {
 
       <button className="span-two" onClick={()=>dispatch({type: ACTIONS.CLEAR})}>AC</button>
       <button>DEL</button>
-      <button >+</button>
+      <OperationButton  operation="/" dispatch={dispatch} />
       {/* <button onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit: 1 } }) }>1</button> */}
       <DigitButton digit="1" dispatch={dispatch} />
       <DigitButton digit="2" dispatch={dispatch} />
@@ -67,7 +114,7 @@ function App() {
       <OperationButton  operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <OperationButton  operation="=" dispatch={dispatch} />
+      <button className="span-two" > = </button>
 
 
     </div>
