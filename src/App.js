@@ -48,6 +48,22 @@ const reducer = (state, { type, payload }) => {
 
     case ACTIONS.CLEAR:
       return {}
+
+    case ACTIONS.EVALUATE:
+      if(
+        state.operation == null ||
+        state.currentOperand == null ||
+        state.previousOperand == null
+      ){
+        return state
+      }
+      return {
+        ...state,
+        previousOperand: null,
+        operation: null,
+        currentOperand: evaluate(state)        
+      } 
+
     default:
       return state;
   }
@@ -78,7 +94,7 @@ const reducer = (state, { type, payload }) => {
         break
 
       case "/":
-        computation = prev * current  
+        computation = prev / current  
         break   
     }
     return computation.toString()
@@ -114,7 +130,7 @@ function App() {
       <OperationButton  operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <button className="span-two" > = </button>
+      <button className="span-two"  onClick={()=>dispatch({type: ACTIONS.EVALUATE}) }> = </button>
 
 
     </div>
