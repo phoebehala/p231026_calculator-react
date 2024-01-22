@@ -17,8 +17,18 @@ const reducer = (state, { type, payload }) => {
   console.log({ type, payload })
   switch (type) {
     case ACTIONS.ADD_DIGIT:
+      if(state.override == true){
+        return {
+          ...state,
+          override: false,
+          currentOperand: payload.digit,
+  
+        }
+
+      }
       if(payload.digit === "0" && state.currentOperand === "0") return state
       if(payload.digit === "." && state.currentOperand.includes('.') )  return state
+
       return {
         ...state,
         currentOperand: `${state.currentOperand || ""}${payload.digit}`,
@@ -59,6 +69,7 @@ const reducer = (state, { type, payload }) => {
       }
       return {
         ...state,
+        override: true,
         previousOperand: null,
         operation: null,
         currentOperand: evaluate(state)        
