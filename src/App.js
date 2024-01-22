@@ -55,6 +55,27 @@ const reducer = (state, { type, payload }) => {
         currentOperand: null
 
       }
+    case ACTIONS.DELETE_DIGIT:
+      if(state.override){
+        return {
+          ...state,
+          override: null,
+          currentOperand: null   
+
+        }       
+      }
+      if(state.currentOperand == null) return state
+      if(state.currentOperand.length === 1){
+        return {
+          ...state,
+          currentOperand: null   
+        }      
+      }
+
+      return {
+          ...state,
+          currentOperand: state.currentOperand.slice(0,-1)      
+      }
 
     case ACTIONS.CLEAR:
       return {}
@@ -124,7 +145,7 @@ function App() {
       </div>
 
       <button className="span-two" onClick={()=>dispatch({type: ACTIONS.CLEAR})}>AC</button>
-      <button>DEL</button>
+      <button onClick={()=>dispatch({type: ACTIONS.DELETE_DIGIT})}>DEL</button>
       <OperationButton  operation="/" dispatch={dispatch} />
       {/* <button onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit: 1 } }) }>1</button> */}
       <DigitButton digit="1" dispatch={dispatch} />
